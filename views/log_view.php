@@ -31,6 +31,7 @@ table#log_table td.info { background: #9cf; }
 	</thead>
 	<tbody>
 	<?php foreach ($logs as $log): ?>
+    <?php if (!isset($log['time'])) { continue; } ?>
 		<tr>
 			<td><?php echo HTML::chars($log['time']) ?></td>
 			<td class="<?php echo HTML::chars(strtolower($log['type'])) ?>"><?php echo HTML::chars($log['type']) ?></td>

@@ -3,7 +3,11 @@ class Controller_Log extends Controller
 {
 	public function action_view()
 	{
-		$log_dir = APPPATH.'logs';
+		$log_dir = 'logs';
+        if (preg_match("/'_directory'\s+=>\s+'([^\']+)'/", var_export(Kohana::$log, 1), $matches))
+        {
+            $log_dir = $matches[1];
+        }
 		$date = $this->request->param('date', date('Y/m/d'));
 		if (!file_exists($log_file = $log_dir.DIRECTORY_SEPARATOR.$date.EXT))
 		{
@@ -12,8 +16,9 @@ class Controller_Log extends Controller
 			));
 		}
 		$logs = Log_Parser::parse_file($log_file);
-		$this->request->response = View::factory('log_view')
+        $logs = array_reverse($logs);
+		$this->response->body(View::factory('log_view')
 			->set('logs', $logs)
-			;
+        );
 	}
 }
